@@ -26,6 +26,8 @@ return new class extends Migration
             $table->string('phone');
             $table->string('logo_path')->nullable();
             $table->string('cover_path')->nullable();
+            $table->integer('is_approved')->default(0);
+            $table->timestamp('approved_at')->nullable();
             $table->timestamps();
         });
     }
