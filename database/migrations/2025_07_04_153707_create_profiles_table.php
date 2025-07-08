@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('owner_name');
             $table->text('description');
             $table->string('address');
+            $table->integer('rt');
+            $table->integer('rw');
             $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();
             $table->string('phone');
