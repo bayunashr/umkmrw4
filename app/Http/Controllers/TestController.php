@@ -14,7 +14,7 @@ class TestController extends Controller
             [-7.1225, 110.1247],
             [-7.1220, 110.1231]
         ];
-        return view('welcome', compact('rw4Coords'));
+        return view('auth.register', compact('rw4Coords'));
     }
 
 }
