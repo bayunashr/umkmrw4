@@ -16,11 +16,10 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->string('name');
             $table->string('slug')->unique();
-            $table->string('owner_name');
-            $table->text('description');
-            $table->string('address');
-            $table->integer('rt');
-            $table->integer('rw');
+            $table->text('description')->nullable();
+            $table->string('address')->nullable();
+            $table->integer('rt')->nullable();
+            $table->integer('rw')->nullable();
             $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();
             $table->string('phone');
