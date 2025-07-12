@@ -157,6 +157,9 @@
                     <a href="{{ route('admin.approval') }}" class="menu-link">
                         <i class="menu-icon tf-icons ri-mail-check-line"></i>
                         <div data-i18n="Moderasi UMKM">Moderasi UMKM</div>
+                        @if($pendingUmkmCount > 0)
+                            <div class="badge bg-danger rounded-pill ms-auto">{{ $pendingUmkmCount }}</div>
+                        @endif
                     </a>
                 </li>
 
