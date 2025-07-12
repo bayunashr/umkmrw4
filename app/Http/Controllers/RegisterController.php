@@ -40,7 +40,7 @@ class RegisterController extends Controller
         $user->profile()->create([
             'name' => $validated['name'],
             'slug' => $slug,
-            'phone' => $validated['phone'],
+            'phone' => 0+$validated['phone'],
             'latitude' => $validated['lat'],
             'longitude' => $validated['lon'],
         ]);

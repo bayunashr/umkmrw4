@@ -42,6 +42,8 @@ Route::middleware(['auth', IsAdmin::class])
         })->name('dashboard');
 
         Route::get('/approval', [\App\Http\Controllers\Admin\UmkmApprovalController::class, 'index'])->name('approval');
+        Route::get('/approval/{id}', [\App\Http\Controllers\Admin\UMKMApprovalController::class, 'show'])->name('approval.show');
+        Route::put('/approval/{id}/approve', [\App\Http\Controllers\Admin\UMKMApprovalController::class, 'approve'])->name('approval.approve');
     });
 
 
