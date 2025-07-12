@@ -3,66 +3,102 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\UMKMApprovalController;
+use App\Http\Controllers\DashboardController as UMKMDashboardController;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsUmkm;
 
-// Auth
+/*
+|--------------------------------------------------------------------------
+| Auth Routes
+|--------------------------------------------------------------------------
+*/
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/waiting-approval', function () {
-    return view('auth.waiting');
-})->middleware('auth')->name('approval.waiting');
-
-// Register
+/*
+|--------------------------------------------------------------------------
+| Register Routes
+|--------------------------------------------------------------------------
+*/
 Route::get('/register', [RegisterController::class, 'showForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register'])->name('register.submit');
 
+/*
+|--------------------------------------------------------------------------
+| Approval Waiting Page
+|--------------------------------------------------------------------------
+*/
+Route::get('/waiting-approval', function () {
+    $user = auth()->user();
 
-// Dashboard
+    if ($user->role === 0) {
+        return redirect()->route('admin.dashboard');
+    }
+
+    if ($user->profile && $user->profile->is_approved) {
+        return redirect()->route('umkm.dashboard');
+    }
+
+    return view('auth.waiting');
+})->middleware('auth')->name('approval.waiting');
+
+/*
+|--------------------------------------------------------------------------
+| Global Dashboard Redirect
+|--------------------------------------------------------------------------
+*/
 Route::middleware('auth')->get('/dashboard', function () {
     $user = auth()->user();
 
     if ($user->role === 0) {
-        return redirect('/admin');
+        return redirect()->route('admin.dashboard');
     } elseif ($user->role === 1) {
-        return redirect('/umkm');
+        if (!$user->profile || !$user->profile->is_approved) {
+            return redirect()->route('approval.waiting');
+        }
+        return redirect()->route('umkm.dashboard');
     }
 
     abort(403, 'Role tidak dikenali');
-});
+})->name('dashboard');
 
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
 Route::middleware(['auth', IsAdmin::class])
     ->prefix('admin')
-    ->name('admin.') // optional: supaya bisa pakai route('admin.dashboard')
+    ->name('admin.')
     ->group(function () {
-        Route::get('/', function () {
-            return view('layouts.admin');
-        })->name('dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-        Route::get('/approval', [\App\Http\Controllers\Admin\UmkmApprovalController::class, 'index'])->name('approval');
-        Route::get('/approval/{id}', [\App\Http\Controllers\Admin\UMKMApprovalController::class, 'show'])->name('approval.show');
-        Route::put('/approval/{id}/approve', [\App\Http\Controllers\Admin\UMKMApprovalController::class, 'approve'])->name('approval.approve');
+        Route::get('/approval', [UmkmApprovalController::class, 'index'])->name('approval');
+        Route::get('/approval/{id}', [UMKMApprovalController::class, 'show'])->name('approval.show');
+        Route::put('/approval/{id}/approve', [UMKMApprovalController::class, 'approve'])->name('approval.approve');
     });
 
-
+/*
+|--------------------------------------------------------------------------
+| UMKM Routes
+|--------------------------------------------------------------------------
+*/
 Route::middleware(['auth', IsUmkm::class])
     ->prefix('umkm')
     ->name('umkm.')
     ->group(function () {
-        Route::get('/', function () {
-            $user = auth()->user();
+        Route::get('/dashboard', [UMKMDashboardController::class, 'index'])->name('dashboard');
 
-            // Cek apakah profile sudah disetujui
-            if (!$user->profile || !$user->profile->is_approved) {
-                return redirect()->route('approval.waiting');
-            }
-
-            return view('layouts.umkm');
-        })->name('dashboard');
-
-        // Tambahkan route UMKM lainnya di sini
+        // Tambahkan route UMKM lainnya di sini...
     });
 
-Route::get('/', [\App\Http\Controllers\TestController::class,'index'])->name('home');
+/*
+|--------------------------------------------------------------------------
+| Home Route
+|--------------------------------------------------------------------------
+*/
+Route::get('/', [TestController::class, 'index'])->name('home');
