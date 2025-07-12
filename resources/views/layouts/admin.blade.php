@@ -135,7 +135,7 @@
 
             <ul class="menu-inner py-1">
                 <!-- Beranda -->
-                <li class="menu-item active">
+                <li class="menu-item {{ Route::is('admin.dashboard*') ? 'active' : '' }}">
                     <a href="{{ route('admin.dashboard') }}" class="menu-link">
                         <i class="menu-icon tf-icons ri-home-smile-line"></i>
                         <div data-i18n="Beranda">Beranda</div>
@@ -147,13 +147,13 @@
                     <span class="menu-header-text" data-i18n="Manajemen UMKM">Manajemen UMKM</span>
                 </li>
 
-                <li class="menu-item">
-                    <a href="app-email.html" class="menu-link">
+                <li class="menu-item {{ Route::is('admin.umkm*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.umkm.index') }}" class="menu-link">
                         <i class="menu-icon tf-icons ri-store-3-line"></i>
                         <div data-i18n="Data UMKM">Data UMKM</div>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item {{ Route::is('admin.approval*') ? 'active' : '' }}">
                     <a href="{{ route('admin.approval') }}" class="menu-link">
                         <i class="menu-icon tf-icons ri-mail-check-line"></i>
                         <div data-i18n="Moderasi UMKM">Moderasi UMKM</div>
