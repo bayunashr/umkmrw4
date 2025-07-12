@@ -11,7 +11,8 @@
         </div>
     @endif
     <div class="card">
-        <div class="card-datatable table-responsive pt-0 mt-5 mt-lg-0">
+        <h5 class="card-header mb-xl-n4 text-center text-xl-start">Persetujuan UMKM</h5>
+        <div class="card-datatable table-responsive pt-0">
             <table class="table table-bordered datatables-approval-umkm">
                 <thead>
                 <tr>
