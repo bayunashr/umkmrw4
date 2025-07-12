@@ -11,7 +11,6 @@
         </div>
     @endif
     <div class="card">
-        <h5 class="card-header mb-xl-n4 text-center text-xl-start">Persetujuan UMKM</h5>
         <div class="card-datatable table-responsive pt-0">
             <table class="table table-bordered datatables-approval-umkm">
                 <thead>
@@ -115,7 +114,7 @@
                             searchable: false,
                         }
                     ],
-                    dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+                    dom: '<"card-header flex-column flex-md-row border-bottom"<"head-label text-center text-md-start mb-3 mb-md-0"><"dt-action-buttons text-end">>t<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>><"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
                     language: {
                         paginate: {
                             next: '<i class="ri-arrow-right-s-line"></i>',
@@ -130,6 +129,7 @@
                         emptyTable: "Tidak ada data dalam tabel"
                     }
                 });
+                $('div.head-label').html('<h5 class="card-title mb-0">Data UMKM</h5>');
 
                 dtTable.on('click', 'a, button', function (e) {
                     e.stopPropagation();
