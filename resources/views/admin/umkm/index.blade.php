@@ -1,6 +1,15 @@
 @extends('layouts.admin')
 
 @section('content')
+    @if (session('success'))
+        <div class="alert alert-solid-primary d-flex align-items-center alert-dismissible" role="alert">
+            <span class="alert-icon rounded">
+              <i class="ri-checkbox-circle-fill ri-22px"></i>
+            </span>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     <div class="card">
         <div class="card-datatable table-responsive pt-0">
             <table class="table table-bordered datatables-data-umkm">
@@ -57,7 +66,7 @@
                         <td>{{ $umkm->rt ? $umkm->rt : '-' }}</td>
                         <td>
                             <div class="d-flex justify-content-center align-items-center gap-2">
-                                <a href="{{ route('admin.umkm.show', $umkm->id) }}" class="btn btn-info btn-sm d-flex justify-content-center align-items-center">
+                                <a href="{{ route('admin.umkm.show', $umkm->slug) }}" class="btn btn-info btn-sm d-flex justify-content-center align-items-center">
                                     <span class="ri-eye-fill"></span>
                                 </a>
                             </div>
@@ -132,7 +141,7 @@
                         {
                             extend: 'collection',
                             className: 'btn btn-label-primary dropdown-toggle me-4 waves-effect waves-light',
-                            text: '<i class="ri-external-link-line me-sm-1"></i> <span class="d-none d-sm-inline-block">Export</span>',
+                            text: '<i class="ri-external-link-line me-sm-1"></i> <span class="d-none d-sm-inline-block">Ekspor</span>',
                             buttons: [
                                 {
                                     extend: 'print',
