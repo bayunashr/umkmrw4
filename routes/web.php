@@ -77,6 +77,13 @@ Route::middleware(['auth', IsAdmin::class])
     ->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
+        Route::get('/umkm', [AdminDashboardController::class, 'indexUmkm'])->name('umkm.index');
+        Route::get('/umkm/create', [AdminDashboardController::class, 'createUmkm'])->name('umkm.create');
+        Route::post('/umkm', [AdminDashboardController::class, 'storeUmkm'])->name('umkm.store');
+        Route::get('/umkm/{profile:slug}', [AdminDashboardController::class, 'showUmkm'])->name('umkm.show');
+        Route::get('/umkm/{profile:slug}/edit', [AdminDashboardController::class, 'editUmkm'])->name('umkm.edit');
+        Route::put('/umkm/{profile:slug}', [AdminDashboardController::class, 'updateUmkm'])->name('umkm.update');
+
         Route::get('/approval', [UmkmApprovalController::class, 'index'])->name('approval');
         Route::get('/approval/{id}', [UMKMApprovalController::class, 'show'])->name('approval.show');
         Route::put('/approval/{id}/approve', [UMKMApprovalController::class, 'approve'])->name('approval.approve');

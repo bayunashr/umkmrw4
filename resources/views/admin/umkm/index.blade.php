@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+@section('title', 'Data UMKM - Banjarsugihan UMKM Digital Map')
+
 @section('content')
     @if (session('success'))
         <div class="alert alert-solid-primary d-flex align-items-center alert-dismissible" role="alert">
@@ -61,9 +63,9 @@
                         <td>{{ $umkm->user->name }}</td>
                         <td>{{ $umkm->phone }}</td>
                         <td>{{ $umkm->rt ? $umkm->rt : '-' }}</td>
-                        <td>{{ $umkm->rt ? $umkm->rt : '-' }}</td>
-                        <td>{{ $umkm->rt ? $umkm->rt : '-' }}</td>
-                        <td>{{ $umkm->rt ? $umkm->rt : '-' }}</td>
+                        <td>{{ $umkm->rw ? $umkm->rw : '-' }}</td>
+                        <td>{{ $umkm->address ? $umkm->address : '-' }}</td>
+                        <td>{{ $umkm->description ? $umkm->description : '-' }}</td>
                         <td>
                             <div class="d-flex justify-content-center align-items-center gap-2">
                                 <a href="{{ route('admin.umkm.show', $umkm->slug) }}" class="btn btn-info btn-sm d-flex justify-content-center align-items-center">
@@ -71,7 +73,6 @@
                                 </a>
                             </div>
                         </td>
-
                     </tr>
                 @endforeach
                 </tbody>
