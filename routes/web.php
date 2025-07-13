@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\GalleryController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RegisterController;
@@ -100,7 +103,26 @@ Route::middleware(['auth', IsUmkm::class])
     ->group(function () {
         Route::get('/dashboard', [UMKMDashboardController::class, 'index'])->name('dashboard');
 
-        // Tambahkan route UMKM lainnya di sini...
+        Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+
+        Route::post('/profile/logo', [ProfileController::class, 'storeLogo'])->name('logo.store');
+        Route::put('/profile/logo', [ProfileController::class, 'updateLogo'])->name('logo.update');
+        Route::delete('/profile/logo', [ProfileController::class, 'destroyLogo'])->name('logo.destroy');
+
+        Route::get('/profile/{profile:slug}/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile/{profile:slug}', [ProfileController::class, 'update'])->name('profile.update');
+
+        Route::post('/profile/cover/store', [ProfileController::class, 'storeCover'])->name('cover.store');
+        Route::put('/profile/cover/update', [ProfileController::class, 'updateCover'])->name('cover.update');
+        Route::delete('/profile/cover/destroy', [ProfileController::class, 'destroyCover'])->name('cover.destroy');
+
+        Route::get('/profile/password/change', [ProfileController::class, 'showChangePasswordForm'])->name('password.change');
+        Route::put('/profile/password/update', [ProfileController::class, 'updatePassword'])->name('password.update');
+        Route::get('/profile/password/forgot', [ProfileController::class, 'showForgotPasswordForm'])->name('password.forgot');
+
+        Route::get('/product', [ProductController::class, 'index'])->name('product');
+
+        Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery');
     });
 
 /*
@@ -108,4 +130,7 @@ Route::middleware(['auth', IsUmkm::class])
 | Home Route
 |--------------------------------------------------------------------------
 */
-Route::get('/', [TestController::class, 'index'])->name('home');
+Route::get('/', [TestController::class, 'index'])->name('map.index');
+
+// Route untuk search UMKM (opsional jika ingin pakai AJAX)
+Route::get('/search-umkm', [TestController::class, 'searchUmkm'])->name('map.search');
