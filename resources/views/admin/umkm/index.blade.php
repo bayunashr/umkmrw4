@@ -36,8 +36,8 @@
                             <div class="d-flex justify-content-start align-items-center user-name">
                                 <div class="avatar-wrapper">
                                     <div class="avatar me-2">
-                                        @if($umkm->avatar && file_exists(public_path('storage/avatars/' . $umkm->avatar)))
-                                            <img src="{{ asset('storage/avatars/' . $umkm->avatar) }}" alt="Avatar"
+                                        @if ($umkm->logo_path && file_exists(public_path('storage/' . $umkm->logo_path)))
+                                            <img src="{{ asset('storage/' . $umkm->logo_path) }}" alt="Avatar"
                                                  class="rounded" width="40" height="40">
                                         @else
                                             @php

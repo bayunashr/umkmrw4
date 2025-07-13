@@ -11,10 +11,10 @@
                 <div class="card-body pt-12">
                     <div class="user-avatar-section">
                         <div class="d-flex align-items-center flex-column">
-                            @if ($umkm->avatar && file_exists(public_path('storage/avatars/' . $umkm->avatar)))
+                            @if ($umkm->logo_path && file_exists(public_path('storage/' . $umkm->logo_path)))
                                 <img
                                     class="img-fluid rounded mb-4"
-                                    src="{{ asset('storage/avatars/' . $umkm->avatar) }}"
+                                    src="{{ asset('storage/' . $umkm->logo_path) }}"
                                     height="120"
                                     width="120"
                                     alt="User avatar" />
