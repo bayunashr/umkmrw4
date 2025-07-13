@@ -35,7 +35,7 @@ class RegisterController extends Controller
             'role' => 1,
         ]);
 
-        $slug = Str::slug($validated['name']) . '-' . uniqid();
+        $slug = generate_unique_slug('profiles', 'slug', $validated['name']);
 
         $user->profile()->create([
             'name' => $validated['name'],
