@@ -70,12 +70,60 @@
             background-clip: text;
         }
 
-        /* Header Search */
+        /* Header Search Container - Fix positioning */
         .header-search {
             flex: 1;
             max-width: 500px;
             margin: 0 30px;
             position: relative;
+            z-index: 1002; /* Higher than other elements */
+        }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+            z-index: 1002;
+        }
+
+        .search-box {
+            position: relative;
+            background: rgba(248, 250, 252, 0.9);
+            border-radius: 25px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            overflow: visible; /* Changed from hidden */
+            z-index: 1002;
+        }
+
+        .search-box:focus-within {
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.15);
+        }
+
+        .search-results {
+            position: absolute !important;
+            top: calc(100% + 5px) !important; /* Adjusted positioning */
+            left: 0 !important;
+            right: 0 !important;
+            background: white !important;
+            border-radius: 15px !important;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2) !important;
+            max-height: 300px !important;
+            overflow-y: auto !important;
+            z-index: 1003 !important; /* Very high z-index */
+            border: 1px solid #e2e8f0 !important;
+            display: none;
+        }
+
+        .search-results.show {
+            display: block !important;
+        }
+
+        @media (max-width: 768px) {
+            .header-search {
+                display: none;
+            }
         }
 
         .search-container {
@@ -121,20 +169,133 @@
             font-size: 18px;
         }
 
-        .search-results {
-            position: absolute;
-            top: 100%;
+        /* Search Modal Styles */
+        .search-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
             left: 0;
-            right: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            backdrop-filter: blur(5px);
+        }
+
+        .search-modal-overlay.show {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 100px;
+        }
+
+        .search-modal-content {
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 600px;
+            max-height: 70vh;
+            overflow: hidden;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .search-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 25px;
+            border-bottom: 1px solid #e2e8f0;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .search-modal-title {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .search-modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+
+        .search-modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .search-modal-body {
             max-height: 400px;
             overflow-y: auto;
-            margin-top: 10px;
-            display: none;
-            z-index: 1001;
-            border: 1px solid rgba(226, 232, 240, 0.8);
+            padding: 0;
+        }
+
+        .search-modal-item {
+            padding: 20px 25px;
+            border-bottom: 1px solid #f1f5f9;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-modal-item:hover {
+            background: #f8fafc;
+        }
+
+        .search-modal-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-modal-item-title {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+
+        .search-modal-item-address {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .search-modal-item-desc {
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        .search-modal-no-results {
+            padding: 40px 25px;
+            text-align: center;
+            color: #64748b;
+        }
+
+        .search-modal-no-results i {
+            font-size: 48px;
+            color: #cbd5e1;
+            margin-bottom: 15px;
         }
 
         .search-item {
@@ -186,10 +347,38 @@
             z-index: 999;
             transform: translateX(350px);
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: calc(100vh - 120px);
+            overflow-y: auto;
         }
 
         .info-panel.active {
             transform: translateX(0);
+        }
+
+        /* Mobile Search in Panel */
+        .mobile-search {
+            display: none;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-search {
+                display: block;
+            }
+
+            .info-panel {
+                top: 90px;
+                right: 15px;
+                left: 15px;
+                width: auto;
+                transform: translateY(-100vh);
+                max-height: calc(100vh - 200px);
+                z-index: 1050;
+            }
+
+            .info-panel.active {
+                transform: translateY(0);
+            }
         }
 
         .info-toggle {
@@ -219,6 +408,19 @@
 
         .info-panel.active + .info-toggle {
             right: 370px;
+        }
+
+        @media (max-width: 768px) {
+            .info-toggle {
+                top: 90px;
+                right: 15px;
+                z-index: 1060;
+            }
+
+            .info-panel.active + .info-toggle {
+                right: 15px;
+                top: 90px;
+            }
         }
 
         /* Stats Grid */
@@ -339,24 +541,33 @@
             width: 100%;
         }
 
-        /* Custom cluster styles */
+        /* Custom cluster styles - Default style with custom colors */
         .marker-cluster-small {
+            background-color: rgba(102, 126, 234, 0.6) !important;
+        }
+
+        .marker-cluster-small div {
             background-color: rgba(102, 126, 234, 0.8) !important;
-            border: 3px solid rgba(102, 126, 234, 1) !important;
+            color: white !important;
+            font-weight: 600 !important;
         }
 
         .marker-cluster-medium {
+            background-color: rgba(102, 126, 234, 0.6) !important;
+        }
+
+        .marker-cluster-medium div {
             background-color: rgba(102, 126, 234, 0.8) !important;
-            border: 3px solid rgba(102, 126, 234, 1) !important;
+            color: white !important;
+            font-weight: 600 !important;
         }
 
         .marker-cluster-large {
-            background-color: rgba(102, 126, 234, 0.8) !important;
-            border: 3px solid rgba(102, 126, 234, 1) !important;
+            background-color: rgba(102, 126, 234, 0.6) !important;
         }
 
-        .marker-cluster div {
-            background-color: rgba(102, 126, 234, 1) !important;
+        .marker-cluster-large div {
+            background-color: rgba(102, 126, 234, 0.8) !important;
             color: white !important;
             font-weight: 600 !important;
         }
@@ -462,8 +673,8 @@
             align-items: center;
             justify-content: center;
             position: absolute;
-            top: 20px;
-            right: 25px;
+            top: 15px;
+            right: 20px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
             overflow: hidden;
         }
@@ -634,33 +845,6 @@
                 font-size: 20px;
             }
 
-            .header-search {
-                max-width: 300px;
-                margin: 0 15px;
-            }
-
-            .info-panel {
-                top: 90px;
-                right: 15px;
-                left: 15px;
-                width: auto;
-                transform: translateY(-400px);
-            }
-
-            .info-panel.active {
-                transform: translateY(0);
-            }
-
-            .info-toggle {
-                top: 90px;
-                right: 15px;
-            }
-
-            .info-panel.active + .info-toggle {
-                right: 15px;
-                top: 90px;
-            }
-
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 10px;
@@ -681,6 +865,7 @@
             .fab-container {
                 bottom: 20px;
                 right: 20px;
+                z-index: 1040;
             }
 
             .fab {
@@ -733,7 +918,7 @@
 <div class="header">
     <div class="logo">
         <i class="fas fa-map-marked-alt"></i>
-        UMKM Banjarsugihan
+        UMKM Surabaya
     </div>
 
     <!-- Search -->
@@ -750,6 +935,17 @@
 
 <!-- Info Panel - Top Right -->
 <div class="info-panel" id="infoPanel">
+    <!-- Mobile Search -->
+    <div class="mobile-search">
+        <div class="search-container">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Cari UMKM..." id="mobileSearchInput">
+                <div class="search-results" id="mobileSearchResults"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Stats Section -->
     <div class="stats-grid">
         <div class="stat-card">
@@ -795,6 +991,19 @@
 <button class="info-toggle" onclick="toggleInfoPanel()">
     <i class="fas fa-info"></i>
 </button>
+
+<!-- Search Modal -->
+<div id="searchModal" class="search-modal-overlay">
+    <div class="search-modal-content">
+        <div class="search-modal-header">
+            <h5 class="search-modal-title">Hasil Pencarian</h5>
+            <button type="button" class="search-modal-close" onclick="closeSearchModal()">&times;</button>
+        </div>
+        <div class="search-modal-body" id="searchModalBody">
+            <!-- Results will be inserted here -->
+        </div>
+    </div>
+</div>
 
 <!-- Map Container -->
 <div id="map"></div>
@@ -849,7 +1058,7 @@
             // Initialize map
             map = L.map('map', {
                 center: [-7.2575, 112.6804],
-                zoom: 13,
+                zoom: 15, // Set default zoom to match reset zoom
                 zoomControl: true
             });
 
@@ -860,29 +1069,31 @@
                 subdomains: ['a', 'b', 'c']
             }).addTo(map);
 
-            // Initialize marker cluster with custom colors
+            // Initialize marker cluster with default styling but custom colors
             markerCluster = L.markerClusterGroup({
                 chunkedLoading: true,
                 maxClusterRadius: 60,
                 spiderfyOnMaxZoom: false,
                 showCoverageOnHover: false,
-                zoomToBoundsOnClick: true,
-                iconCreateFunction: function(cluster) {
-                    const count = cluster.getChildCount();
-                    let size = 'small';
-                    if (count >= 10) size = 'medium';
-                    if (count >= 100) size = 'large';
-
-                    return new L.DivIcon({
-                        html: '<div><span>' + count + '</span></div>',
-                        className: 'marker-cluster marker-cluster-' + size,
-                        iconSize: new L.Point(40, 40)
-                    });
-                }
+                zoomToBoundsOnClick: true
+                // Removed custom iconCreateFunction to use default styling
             });
 
-            // Load UMKM data
+            // Load UMKM data first
             loadUmkmData();
+
+            // Set initial view to show all UMKMs (same as "Tampilkan Semua")
+            setTimeout(() => {
+                if (markerCluster.getLayers().length > 0) {
+                    map.fitBounds(markerCluster.getBounds(), {
+                        padding: [20, 20],
+                        maxZoom: 16 // Limit maximum zoom when fitting bounds
+                    });
+                } else {
+                    // Fallback if no markers
+                    map.setView([-7.2575, 112.6804], 15);
+                }
+            }, 500);
 
             // Force map resize after initialization
             setTimeout(() => {
@@ -966,7 +1177,7 @@
     }
 
     function createPopupContent(umkm) {
-        const logoUrl = umkm.logo_path ? `/storage/${umkm.logo_path}` : '/images/default-logo.png';
+        const logoUrl = umkm.logo_path ? `/storage/${umkm.logo_path}` : null;
         const products = umkm.products || [];
 
         let productsHtml = '';
@@ -983,12 +1194,26 @@
                 `;
         }
 
+        // Logo section with proper fallback and positioning
+        let logoHtml = '';
+        if (logoUrl) {
+            logoHtml = `
+                    <div class="popup-logo">
+                        <img src="${logoUrl}" alt="${umkm.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 16px;" onerror="this.parentElement.innerHTML='<i class=\\"fas fa-store\\" style=\\"color: #667eea; font-size: 24px;\\"></i>'">
+                    </div>
+                `;
+        } else {
+            logoHtml = `
+                    <div class="popup-logo">
+                        <i class="fas fa-store" style="color: #667eea; font-size: 24px;"></i>
+                    </div>
+                `;
+        }
+
         return `
                 <div class="popup-container">
                     <div class="popup-header">
-                        <div class="popup-logo">
-                            <img src="${logoUrl}" alt="${umkm.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 16px;" onerror="this.src='/images/default-logo.png'">
-                        </div>
+                        ${logoHtml}
                         <div class="popup-title">${umkm.name}</div>
                         <div class="popup-address">
                             <i class="fas fa-map-marker-alt"></i>
@@ -1025,79 +1250,225 @@
             `;
     }
 
-    // Search functionality
+    // Search functionality with real-time - FIXED VERSION
     function setupSearch() {
-        const searchInput = document.getElementById('searchInput');
-        const searchResults = document.getElementById('searchResults');
+        console.log('Setting up search functionality...');
+        // Desktop search
+        setupSearchForElement('searchInput', 'searchResults');
+        // Mobile search
+        setupSearchForElement('mobileSearchInput', 'mobileSearchResults');
+    }
+
+    function setupSearchForElement(inputId, resultsId) {
+        const searchInput = document.getElementById(inputId);
+
+        console.log(`Setting up search for: ${inputId}`, searchInput);
+
+        if (!searchInput) {
+            console.warn(`Search input not found: ${inputId}`);
+            return;
+        }
+
         let searchTimeout;
 
-        if (!searchInput || !searchResults) return;
-
-        searchInput.addEventListener('input', function() {
+        // Input event listener
+        searchInput.addEventListener('input', function(e) {
+            console.log('Search input event triggered:', this.value);
             clearTimeout(searchTimeout);
             const query = this.value.trim();
 
-            if (query.length < 2) {
-                searchResults.style.display = 'none';
+            // Close modal if query is empty
+            if (query.length < 1) {
+                closeSearchModal();
                 return;
             }
 
             searchTimeout = setTimeout(() => {
-                performSearch(query);
-            }, 300);
+                console.log('Performing search for:', query);
+                performRealTimeSearch(query, null); // We don't need resultsContainer anymore
+            }, 150);
         });
 
-        // Hide results when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.search-container')) {
-                searchResults.style.display = 'none';
+        // Enter key to trigger search
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const query = this.value.trim();
+                if (query.length > 0) {
+                    performRealTimeSearch(query, null);
+                }
             }
         });
     }
 
-    function performSearch(query) {
-        const filteredUmkms = umkms.filter(umkm =>
-            umkm.name.toLowerCase().includes(query.toLowerCase()) ||
-            (umkm.description && umkm.description.toLowerCase().includes(query.toLowerCase())) ||
-            (umkm.address && umkm.address.toLowerCase().includes(query.toLowerCase()))
-        );
+    // Close modal when clicking outside or pressing ESC
+    document.addEventListener('DOMContentLoaded', function() {
+        // ESC key listener
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeSearchModal();
+            }
+        });
 
-        displaySearchResults(filteredUmkms);
+        // Click outside modal to close
+        document.getElementById('searchModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSearchModal();
+            }
+        });
+    });
+
+    function performRealTimeSearch(query, resultsContainer) {
+        console.log('Searching for:', query);
+        console.log('Total UMKMs available:', umkms.length);
+
+        try {
+            // Client-side search for better performance
+            const filteredUmkms = umkms.filter(umkm => {
+                const name = umkm.name ? umkm.name.toLowerCase() : '';
+                const description = umkm.description ? umkm.description.toLowerCase() : '';
+                const address = umkm.address ? umkm.address.toLowerCase() : '';
+                const searchQuery = query.toLowerCase();
+
+                return name.includes(searchQuery) ||
+                    description.includes(searchQuery) ||
+                    address.includes(searchQuery);
+            });
+
+            console.log('Filtered results:', filteredUmkms.length);
+            displaySearchResults(filteredUmkms.slice(0, 8), resultsContainer); // Limit to 8 results
+
+        } catch (error) {
+            console.error('Search error:', error);
+            resultsContainer.innerHTML = '<div class="search-item">Error saat mencari</div>';
+            resultsContainer.style.display = 'block';
+        }
     }
 
-    function displaySearchResults(results) {
-        const searchResults = document.getElementById('searchResults');
-        searchResults.innerHTML = '';
+    // Simple modal functions
+    function showSearchModal() {
+        const modal = document.getElementById('searchModal');
+        modal.classList.add('show');
+    }
 
-        if (results.length === 0) {
-            searchResults.innerHTML = '<div class="search-item">Tidak ada UMKM ditemukan</div>';
-            searchResults.style.display = 'block';
+    function closeSearchModal() {
+        const modal = document.getElementById('searchModal');
+        modal.classList.remove('show');
+    }
+
+    // Updated search functionality with modal
+    function performRealTimeSearch(query, resultsContainer) {
+        console.log('Searching for:', query);
+        console.log('Total UMKMs available:', umkms.length);
+
+        try {
+            // Client-side search
+            const filteredUmkms = umkms.filter(umkm => {
+                const name = umkm.name ? umkm.name.toLowerCase() : '';
+                const description = umkm.description ? umkm.description.toLowerCase() : '';
+                const address = umkm.address ? umkm.address.toLowerCase() : '';
+                const searchQuery = query.toLowerCase();
+
+                return name.includes(searchQuery) ||
+                    description.includes(searchQuery) ||
+                    address.includes(searchQuery);
+            });
+
+            console.log('Filtered results:', filteredUmkms.length);
+
+            // Show results in modal
+            displaySearchModal(filteredUmkms, query);
+
+        } catch (error) {
+            console.error('Search error:', error);
+        }
+    }
+
+    function displaySearchModal(results, query) {
+        const modalBody = document.getElementById('searchModalBody');
+        const modalTitle = document.querySelector('.search-modal-title');
+
+        if (!modalBody) {
+            console.error('Modal body not found');
             return;
         }
 
-        results.forEach(umkm => {
-            const item = document.createElement('div');
-            item.className = 'search-item';
-            item.innerHTML = `
-                    <div class="search-item-title">${umkm.name}</div>
-                    <div class="search-item-address">${umkm.address || 'Alamat tidak tersedia'}</div>
-                    <div class="search-item-desc">${umkm.description ? umkm.description.substring(0, 80) + '...' : ''}</div>
+        // Update title
+        modalTitle.textContent = `Hasil Pencarian "${query}" (${results.length})`;
+
+        // Clear previous results
+        modalBody.innerHTML = '';
+
+        if (results.length === 0) {
+            modalBody.innerHTML = `
+                    <div class="search-modal-no-results">
+                        <i class="fas fa-search"></i>
+                        <div style="font-weight: 600; margin-bottom: 5px;">Tidak ada UMKM ditemukan</div>
+                        <div>Coba kata kunci yang berbeda</div>
+                    </div>
                 `;
+        } else {
+            results.forEach(umkm => {
+                const item = document.createElement('div');
+                item.className = 'search-modal-item';
 
-            item.addEventListener('click', () => {
-                if (markers[umkm.id]) {
-                    map.setView([umkm.latitude, umkm.longitude], 16);
-                    markers[umkm.id].openPopup();
-                }
+                const displayName = umkm.name.length > 50 ?
+                    umkm.name.substring(0, 50) + '...' : umkm.name;
+                const displayAddress = umkm.address ?
+                    (umkm.address.length > 80 ?
+                        umkm.address.substring(0, 80) + '...' : umkm.address) :
+                    'Alamat tidak tersedia';
+                const displayDesc = umkm.description ?
+                    (umkm.description.length > 100 ?
+                        umkm.description.substring(0, 100) + '...' : umkm.description) :
+                    '';
 
-                searchResults.style.display = 'none';
-                document.getElementById('searchInput').value = umkm.name;
+                item.innerHTML = `
+                        <div class="search-modal-item-title">${displayName}</div>
+                        <div class="search-modal-item-address"><i class="fas fa-map-marker-alt"></i> ${displayAddress}</div>
+                        ${displayDesc ? `<div class="search-modal-item-desc">${displayDesc}</div>` : ''}
+                    `;
+
+                item.addEventListener('click', function() {
+                    console.log('Modal item clicked:', umkm.name);
+
+                    try {
+                        if (markers[umkm.id]) {
+                            // Close modal
+                            closeSearchModal();
+
+                            // Navigate to marker
+                            map.setView([umkm.latitude, umkm.longitude], 17);
+                            setTimeout(() => {
+                                markers[umkm.id].openPopup();
+                            }, 300);
+
+                            // Update search inputs
+                            const inputs = ['searchInput', 'mobileSearchInput'];
+                            inputs.forEach(inputId => {
+                                const input = document.getElementById(inputId);
+                                if (input) input.value = umkm.name;
+                            });
+
+                            console.log('Successfully navigated to UMKM:', umkm.name);
+                        } else {
+                            console.warn('Marker not found for UMKM:', umkm.id);
+                            alert('Lokasi UMKM tidak ditemukan di peta');
+                        }
+                    } catch (error) {
+                        console.error('Error navigating to UMKM:', error);
+                        alert('Terjadi kesalahan saat membuka lokasi UMKM');
+                    }
+                });
+
+                modalBody.appendChild(item);
             });
+        }
 
-            searchResults.appendChild(item);
-        });
+        // Show modal
+        showSearchModal();
 
-        searchResults.style.display = 'block';
+        console.log('Search modal displayed successfully');
     }
 
     // Info panel toggle
@@ -1122,9 +1493,24 @@
         // Filter markers
         markerCluster.clearLayers();
 
-        const filteredUmkms = category === null ? umkms : umkms.filter(umkm =>
-            umkm.description && umkm.description.toLowerCase().includes(category.toLowerCase())
-        );
+        let filteredUmkms;
+        if (category === null) {
+            // Show all UMKMs
+            filteredUmkms = umkms;
+        } else if (category === 'lainnya') {
+            // Show uncategorized UMKMs (those not matching any specific category)
+            const keywords = ['makanan', 'minuman', 'fashion', 'kerajinan', 'jasa', 'elektronik', 'kecantikan', 'otomotif', 'pertanian', 'teknologi'];
+            filteredUmkms = umkms.filter(umkm => {
+                return !keywords.some(keyword =>
+                    umkm.description && umkm.description.toLowerCase().includes(keyword.toLowerCase())
+                );
+            });
+        } else {
+            // Show UMKMs matching specific category
+            filteredUmkms = umkms.filter(umkm =>
+                umkm.description && umkm.description.toLowerCase().includes(category.toLowerCase())
+            );
+        }
 
         filteredUmkms.forEach(umkm => {
             if (umkm.latitude && umkm.longitude && markers[umkm.id]) {
@@ -1201,7 +1587,7 @@
     }
 
     function resetZoom() {
-        map.setView([-7.2575, 112.6804], 13);
+        map.setView([-7.2575, 112.6804], 15);
         showAllUmkm();
     }
 
@@ -1217,16 +1603,20 @@
         }
     }
 
+    // Remove test function since we're fixing the real issue
     // Event listeners
     document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM Content Loaded - Initializing...');
+
         // Hide loading immediately when DOM is ready
         document.getElementById('loadingScreen').style.display = 'none';
 
-        // Setup search
+        // Setup search first (before map initialization)
         setupSearch();
 
         // Delay map initialization to ensure DOM is fully ready
         setTimeout(() => {
+            console.log('Initializing map...');
             initMap();
         }, 100);
     });

@@ -121,6 +121,11 @@ Route::middleware(['auth', IsUmkm::class])
         Route::get('/profile/password/forgot', [ProfileController::class, 'showForgotPasswordForm'])->name('password.forgot');
 
         Route::get('/product', [ProductController::class, 'index'])->name('product');
+        Route::get('/product/create', [ProductController::class, 'create'])->name('product.create');
+        Route::post('/product', [ProductController::class, 'store'])->name('product.store');
+        Route::get('/product/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
+        Route::put('/product/{id}', [ProductController::class, 'update'])->name('product.update');
+        Route::delete('/product/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
 
         Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery');
     });
@@ -132,5 +137,8 @@ Route::middleware(['auth', IsUmkm::class])
 */
 Route::get('/', [TestController::class, 'index'])->name('map.index');
 
-// Route untuk search UMKM (opsional jika ingin pakai AJAX)
-Route::get('/search-umkm', [TestController::class, 'searchUmkm'])->name('map.search');
+// Route untuk search UMKM (AJAX)
+Route::get('/api/search-umkm', [TestController::class, 'searchUmkm'])->name('api.search.umkm');
+
+// Route untuk halaman profil UMKM
+Route::get('/umkm/{slug}', [TestController::class, 'show'])->name('umkm.show');
