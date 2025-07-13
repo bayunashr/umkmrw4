@@ -144,13 +144,13 @@
                         <div class="row">
                             <div class="col-6 mt-1">
                                 <div class="form-floating form-floating-outline mb-5">
-                                    <input type="text" class="form-control" id="lat" name="lat" readonly/>
+                                    <input step="any" type="text" class="form-control" id="lat" name="lat" readonly/>
                                     <label for="lat">Latitude</label>
                                 </div>
                             </div>
                             <div class="col-6 mt-1">
                                 <div class="form-floating form-floating-outline mb-5">
-                                    <input type="text" class="form-control" id="lon" name="lon" readonly/>
+                                    <input step="any" type="text" class="form-control" id="lon" name="lon" readonly/>
                                     <label for="lon">Longitude</label>
                                 </div>
                             </div>
