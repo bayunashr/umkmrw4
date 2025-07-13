@@ -1,9 +1,11 @@
 @extends('layouts.admin')
 
+@section('title', $pendingUmkm->name . ' - Banjarsugihan UMKM Digital Map')
+
 @section('content')
     <div class="card">
         <div class="card-header p-3 d-flex align-items-center justify-content-start position-relative">
-            <a href="{{ route('admin.approval') }}" class="btn btn-danger"><span class="ri-arrow-go-back-fill"></span></a>
+            <a href="{{ route('admin.approval') }}" class="btn btn-danger btn-sm"><span class="ri-arrow-go-back-fill"></span></a>
             <h5 class="position-absolute top-50 start-50 translate-middle m-0">
                 Detail UMKM {{ $pendingUmkm->name }}
             </h5>

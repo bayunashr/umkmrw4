@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+@section('title', 'Persetujuan UMKM - Banjarsugihan UMKM Digital Map')
+
 @section('content')
     @if (session('success'))
         <div class="alert alert-solid-primary d-flex align-items-center alert-dismissible" role="alert">
@@ -11,6 +13,7 @@
         </div>
     @endif
     <div class="card">
+        <h5 class="card-header text-center text-md-start mb-md-n5">Persetujuan UMKM</h5>
         <div class="card-datatable table-responsive pt-0">
             <table class="table table-bordered datatables-approval-umkm">
                 <thead>
@@ -114,7 +117,9 @@
                             searchable: false,
                         }
                     ],
-                    dom: '<"card-header flex-column flex-md-row border-bottom"<"head-label text-center text-md-start mb-3 mb-md-0"><"dt-action-buttons text-end">>t<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>><"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+                    dom: '<"row mx-1 mt-3"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center"f>>' +
+                        '<"table-responsive"t>' +
+                        '<"row mx-1"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6 d-flex justify-content-md-end justify-content-center"p>>',
                     language: {
                         paginate: {
                             next: '<i class="ri-arrow-right-s-line"></i>',
