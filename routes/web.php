@@ -123,11 +123,16 @@ Route::middleware(['auth', IsUmkm::class])
         Route::get('/product', [ProductController::class, 'index'])->name('product');
         Route::get('/product/create', [ProductController::class, 'create'])->name('product.create');
         Route::post('/product', [ProductController::class, 'store'])->name('product.store');
+        Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
         Route::get('/product/{id}/edit', [ProductController::class, 'edit'])->name('product.edit');
         Route::put('/product/{id}', [ProductController::class, 'update'])->name('product.update');
         Route::delete('/product/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
 
         Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery');
+        Route::get('/gallery/create', [GalleryController::class, 'create'])->name('gallery.create');
+        Route::get('/gallery/{id}', [GalleryController::class, 'show'])->name('gallery.show');
+        Route::get('/gallery/{id}/edit', [GalleryController::class, 'edit'])->name('gallery.edit');
+        Route::delete('/gallery/{id}', [GalleryController::class, 'destroy'])->name('gallery.destroy');
     });
 
 /*

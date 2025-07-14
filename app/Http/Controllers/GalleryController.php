@@ -12,7 +12,28 @@ class GalleryController extends Controller
      */
     public function index()
     {
-        return view('gallery.index');
+        try {
+            // Ambil profile user yang login
+            $profile = auth()->user()->profile;
+
+            if (!$profile) {
+                return redirect()->route('umkm.profile')
+                    ->with('error', 'Silakan lengkapi profile UMKM Anda terlebih dahulu.');
+            }
+
+            // Ambil semua galeri milik profile ini, urutkan berdasarkan tanggal terbaru
+            $galleries = $profile->galleries()
+                ->latest()
+                ->get();
+
+            return view('gallery.index', compact('galleries', 'profile'));
+
+        } catch (\Exception $e) {
+            \Log::error('Error in gallery index: ' . $e->getMessage());
+            return redirect()
+                ->route('umkm.dashboard')
+                ->with('error', 'Terjadi kesalahan saat mengakses galeri.');
+        }
     }
 
     /**

@@ -6,13 +6,6 @@
     <div class="row">
         <!-- Alert Messages -->
         <div class="col-12">
-            @if (session('success'))
-                <div class="alert alert-success d-flex align-items-center alert-dismissible" role="alert">
-                    <i class="ri-checkbox-circle-line me-2"></i>
-                    <div>{{ session('success') }}</div>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
 
             @if (session('error'))
                 <div class="alert alert-danger d-flex align-items-center alert-dismissible" role="alert">
@@ -176,7 +169,7 @@
                             </div>
 
                             <!-- Logo Display -->
-                            <div class="logo-container mb-4">
+                            <div class="logo-container mb-4 mt-2">
                                 @if ($umkm->logo_path && file_exists(public_path('storage/' . $umkm->logo_path)))
                                     <img class="img-fluid rounded-3 shadow-sm"
                                          src="{{ asset('storage/' . $umkm->logo_path) }}"

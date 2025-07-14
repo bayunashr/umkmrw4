@@ -98,41 +98,63 @@
                     </label>
 
                     <div class="upload-area">
+                        <!-- File Input -->
                         <input
                             type="file"
                             name="image"
-                            id="image-upload"
+                            id="imageInput"
                             class="d-none @error('image') is-invalid @enderror"
                             accept="image/jpeg,image/jpg,image/png"
-                            onchange="handleImageUpload(this)"
                         >
 
-                        <div id="upload-zone" class="upload-zone" onclick="document.getElementById('image-upload').click()">
+                        <!-- Upload Zone (Initially Visible) -->
+                        <div id="uploadZone" class="upload-zone" onclick="document.getElementById('imageInput').click()">
                             <div class="upload-content text-center">
                                 <div class="upload-icon mb-3">
-                                    <i class="ri-upload-cloud-2-line"></i>
+                                    <i class="ri-upload-cloud-2-line" id="uploadIcon"></i>
                                 </div>
-                                <h6 class="upload-title mb-2">Klik untuk upload gambar</h6>
-                                <p class="upload-subtitle text-muted mb-0">
+                                <h6 class="upload-title mb-2" id="uploadTitle">Klik untuk pilih gambar</h6>
+                                <p class="upload-subtitle text-muted mb-0" id="uploadSubtitle">
                                     Format: JPG, PNG, JPEG • Maksimal: 5MB
                                 </p>
                             </div>
                         </div>
 
-                        <div id="image-preview" class="image-preview-container" style="display: none;">
-                            <div class="preview-wrapper">
-                                <img id="preview-image" class="preview-img" src="" alt="Preview">
-                                <div class="preview-overlay">
-                                    <button type="button" class="btn-remove" onclick="removeImage()" title="Hapus gambar">
-                                        <i class="ri-close-line"></i>
-                                    </button>
+                        <!-- Image Preview (Initially Hidden) -->
+                        <div id="imagePreview" class="image-preview-container" style="display: none;">
+                            <div class="alert alert-success d-flex align-items-center mb-3">
+                                <i class="ri-check-circle-line me-2"></i>
+                                <span><strong>Gambar berhasil dipilih!</strong> Siap untuk disimpan.</span>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="preview-wrapper">
+                                        <img id="previewImage" class="preview-img" src="" alt="Preview">
+                                        <div class="preview-overlay">
+                                            <button type="button" class="btn-remove" onclick="removeImage()" title="Hapus gambar">
+                                                <i class="ri-close-line"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-8 d-flex flex-column justify-content-center">
+                                    <div class="image-info">
+                                        <h6 class="mb-2"><i class="ri-file-image-line me-2"></i>Detail Gambar:</h6>
+                                        <p class="mb-1"><strong>Nama:</strong> <span id="fileName">-</span></p>
+                                        <p class="mb-1"><strong>Ukuran:</strong> <span id="fileSize">-</span></p>
+                                        <div class="mt-2">
+                                            <span class="badge bg-success">
+                                                <i class="ri-check-line me-1"></i>Siap untuk disimpan
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="image-info">
-                                <p class="image-name mb-1" id="image-name"></p>
-                                <small class="image-size text-muted" id="image-size"></small>
-                            </div>
                         </div>
+
+                        <!-- Error Messages -->
+                        <div id="errorMessages"></div>
                     </div>
 
                     @error('image')
@@ -157,7 +179,7 @@
                         </a>
                     </div>
                     <div class="col-md-6">
-                        <button type="submit" class="btn btn-primary w-100">
+                        <button type="submit" class="btn btn-primary w-100" id="submitBtn">
                             <i class="ri-save-line me-1"></i> Simpan Produk
                         </button>
                     </div>
@@ -167,7 +189,7 @@
     </div>
 @endsection
 
-@push('styles')
+@push('css')
     <style>
         .upload-area {
             width: 100%;
@@ -188,6 +210,11 @@
             background: #f8f9ff;
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(105, 108, 255, 0.1);
+        }
+
+        .upload-zone.loading {
+            pointer-events: none;
+            opacity: 0.7;
         }
 
         .upload-content {
@@ -231,7 +258,6 @@
             border-radius: 12px;
             overflow: hidden;
             background: #ffffff;
-            margin-bottom: 12px;
         }
 
         .preview-img {
@@ -271,35 +297,13 @@
             transform: scale(1.1);
         }
 
-        .image-info {
-            text-align: center;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        .image-name {
-            color: #374151;
-            font-weight: 500;
-            font-size: 14px;
-            margin: 0;
-            word-break: break-all;
-        }
-
-        .image-size {
-            color: #6b7280;
-            font-size: 12px;
-        }
-
-        /* Error state */
-        .upload-zone.error {
-            border-color: #ef4444;
-            background: #fef2f2;
-        }
-
-        .upload-zone.error .upload-icon {
-            color: #ef4444;
-        }
-
-        .upload-zone.error .upload-title {
-            color: #dc2626;
+        .spinning {
+            animation: spin 1s linear infinite;
         }
 
         /* Responsive */
@@ -327,107 +331,152 @@
     </style>
 @endpush
 
-@push('scripts')
+@push('js')
     <script>
-        function handleImageUpload(input) {
-            const file = input.files[0];
-            const uploadZone = document.getElementById('upload-zone');
-            const previewContainer = document.getElementById('image-preview');
-            const previewImg = document.getElementById('preview-image');
-            const imageName = document.getElementById('image-name');
-            const imageSize = document.getElementById('image-size');
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageInput = document.getElementById('imageInput');
+            const uploadZone = document.getElementById('uploadZone');
+            const uploadIcon = document.getElementById('uploadIcon');
+            const uploadTitle = document.getElementById('uploadTitle');
+            const uploadSubtitle = document.getElementById('uploadSubtitle');
+            const imagePreview = document.getElementById('imagePreview');
+            const previewImage = document.getElementById('previewImage');
+            const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
+            const errorMessages = document.getElementById('errorMessages');
+            const submitBtn = document.getElementById('submitBtn');
 
-            // Reset error state
-            uploadZone.classList.remove('error');
+            // Handle file selection
+            imageInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
 
-            if (file) {
-                // Validasi file
+                // Clear any previous errors
+                clearErrors();
+
+                if (!file) {
+                    console.log('❌ No file selected');
+                    return;
+                }
+
+                console.log('📁 File selected:', file.name);
+
+                // Validate file type
                 const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-                const maxSize = 5 * 1024 * 1024; // 5MB
-
                 if (!allowedTypes.includes(file.type)) {
                     showError('Format file tidak didukung. Gunakan JPG, PNG, atau JPEG.');
-                    input.value = '';
+                    resetInput();
                     return;
                 }
 
-                if (file.size > maxSize) {
+                // Validate file size (5MB)
+                if (file.size > 5 * 1024 * 1024) {
                     showError('Ukuran file terlalu besar. Maksimal 5MB.');
-                    input.value = '';
+                    resetInput();
                     return;
                 }
 
-                // Show preview
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    previewImg.src = e.target.result;
-                    imageName.textContent = file.name;
-                    imageSize.textContent = formatFileSize(file.size);
+                // Show loading state
+                showLoadingState();
 
-                    uploadZone.style.display = 'none';
-                    previewContainer.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
-        }
+                // Process file with slight delay for better UX
+                setTimeout(() => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        // Update preview elements
+                        previewImage.src = e.target.result;
+                        fileName.textContent = file.name;
+                        fileSize.textContent = formatFileSize(file.size);
 
-        function removeImage() {
-            const input = document.getElementById('image-upload');
-            const uploadZone = document.getElementById('upload-zone');
-            const previewContainer = document.getElementById('image-preview');
+                        // Hide upload zone and show preview
+                        uploadZone.style.display = 'none';
+                        imagePreview.style.display = 'block';
 
-            input.value = '';
-            uploadZone.style.display = 'block';
-            previewContainer.style.display = 'none';
-            uploadZone.classList.remove('error');
-        }
+                        console.log('✅ Image preview loaded successfully');
+                    };
 
-        function showError(message) {
-            const uploadZone = document.getElementById('upload-zone');
-            uploadZone.classList.add('error');
+                    reader.onerror = function() {
+                        showError('Gagal membaca file. Coba pilih file lain.');
+                        resetInput();
+                    };
 
-            // Create or update error message
-            let errorMsg = document.querySelector('.upload-error-msg');
-            if (!errorMsg) {
-                errorMsg = document.createElement('div');
-                errorMsg.className = 'upload-error-msg text-danger mt-2';
-                uploadZone.parentNode.appendChild(errorMsg);
-            }
-            errorMsg.innerHTML = `<i class="ri-error-warning-line me-1"></i>${message}`;
+                    reader.readAsDataURL(file);
+                }, 500);
+            });
 
-            // Remove error message after 5 seconds
-            setTimeout(() => {
-                if (errorMsg) {
-                    errorMsg.remove();
-                }
-                uploadZone.classList.remove('error');
-            }, 5000);
-        }
-
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-
-        // Handle form submission
-        document.querySelector('form').addEventListener('submit', function(e) {
-            const uploadZone = document.getElementById('upload-zone');
-            const submitBtn = document.querySelector('button[type="submit"]');
-
-            if (uploadZone.style.display !== 'none') {
-                // Add loading state to upload zone if no image selected
-                uploadZone.style.opacity = '0.7';
-                uploadZone.style.pointerEvents = 'none';
-            }
-
-            // Add loading state to submit button
-            if (submitBtn) {
+            // Handle form submission
+            document.querySelector('form').addEventListener('submit', function() {
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="ri-loader-4-line me-1 spinner-border spinner-border-sm"></i> Menyimpan...';
+                submitBtn.innerHTML = '<i class="ri-loader-4-line me-1 spinning"></i> Menyimpan Produk...';
+
+                if (imageInput.files.length > 0) {
+                    console.log('💾 Submitting form with image:', imageInput.files[0].name);
+                } else {
+                    console.log('💾 Submitting form without image');
+                }
+            });
+
+            function showLoadingState() {
+                uploadZone.classList.add('loading');
+                uploadIcon.className = 'ri-loader-4-line spinning';
+                uploadTitle.textContent = 'Memproses gambar...';
+                uploadSubtitle.textContent = 'Mohon tunggu sebentar';
             }
+
+            function resetLoadingState() {
+                uploadZone.classList.remove('loading');
+                uploadIcon.className = 'ri-upload-cloud-2-line';
+                uploadTitle.textContent = 'Klik untuk pilih gambar';
+                uploadSubtitle.textContent = 'Format: JPG, PNG, JPEG • Maksimal: 5MB';
+            }
+
+            function showError(message) {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'alert alert-danger d-flex align-items-center mt-3';
+                errorDiv.innerHTML = `<i class="ri-error-warning-line me-2"></i><span>${message}</span>`;
+
+                errorMessages.appendChild(errorDiv);
+
+                // Auto hide after 5 seconds
+                setTimeout(() => {
+                    if (errorDiv.parentNode) {
+                        errorDiv.remove();
+                    }
+                }, 5000);
+
+                console.log('❌ Error:', message);
+            }
+
+            function clearErrors() {
+                errorMessages.innerHTML = '';
+            }
+
+            function resetInput() {
+                imageInput.value = '';
+                resetLoadingState();
+            }
+
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            // Make removeImage function global
+            window.removeImage = function() {
+                if (confirm('Apakah Anda yakin ingin menghapus gambar ini?')) {
+                    imageInput.value = '';
+                    uploadZone.style.display = 'block';
+                    imagePreview.style.display = 'none';
+                    resetLoadingState();
+                    clearErrors();
+
+                    console.log('🗑️ Image removed');
+                }
+            };
+
+            console.log('🚀 Image upload script initialized');
         });
     </script>
 @endpush
