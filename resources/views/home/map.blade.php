@@ -1236,7 +1236,7 @@
                         </div>
                         ${productsHtml}
                         <div class="popup-actions">
-                            <a href="/umkm/${umkm.slug}" class="popup-button primary">
+                            <a href="/${umkm.slug}" class="popup-button primary">
                                 <i class="fas fa-eye"></i>
                                 Lihat Profil
                             </a>
