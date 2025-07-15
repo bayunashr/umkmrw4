@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\UMKMApprovalController;
 use App\Http\Controllers\DashboardController as UMKMDashboardController;
@@ -133,6 +134,8 @@ Route::middleware(['auth', IsUmkm::class])
         Route::get('/gallery/{id}', [GalleryController::class, 'show'])->name('gallery.show');
         Route::get('/gallery/{id}/edit', [GalleryController::class, 'edit'])->name('gallery.edit');
         Route::delete('/gallery/{id}', [GalleryController::class, 'destroy'])->name('gallery.destroy');
+        Route::post('/gallery', [GalleryController::class, 'store'])->name('gallery.store');
+        Route::put('/gallery/{id}', [GalleryController::class, 'update'])->name('gallery.update');
     });
 
 /*
@@ -140,10 +143,6 @@ Route::middleware(['auth', IsUmkm::class])
 | Home Route
 |--------------------------------------------------------------------------
 */
-Route::get('/', [TestController::class, 'index'])->name('map.index');
+Route::get('/', [HomeController::class, 'index'])->name('home.index');
 
-// Route untuk search UMKM (AJAX)
-Route::get('/api/search-umkm', [TestController::class, 'searchUmkm'])->name('api.search.umkm');
-
-// Route untuk halaman profil UMKM
-Route::get('/umkm/{slug}', [TestController::class, 'show'])->name('umkm.show');
+Route::get('/{slug}', [HomeController::class, 'show'])->name('home.show');

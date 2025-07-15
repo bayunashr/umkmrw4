@@ -11,7 +11,7 @@
                     <th style="width: 1%; white-space: nowrap;">No</th>
                     <th>Foto</th>
                     <th>Keterangan</th>
-                    <th style="width: 15%; white-space: nowrap;">Tanggal</th>
+                    <th style="width: 15%; white-space: nowrap;">Tanggal Upload</th>
                     <th style="width: 1%; white-space: nowrap;">Aksi</th>
                 </tr>
                 </thead>
@@ -82,7 +82,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <button type="button" class="dropdown-item" onclick="viewImage('{{ asset('storage/' . $gallery->image_path) }}', 'Foto Galeri {{ $i + 1 }}')">>
+                                        <button type="button" class="dropdown-item" onclick="viewImage('{{ asset('storage/' . $gallery->image_path) }}', 'Foto Galeri {{ $i + 1 }}')">
                                             <i class="ri-fullscreen-line me-2"></i>
                                             Lihat Penuh
                                         </button>
@@ -363,6 +363,8 @@
             document.getElementById('imageViewerTitle').textContent = imageTitle;
             document.getElementById('imageViewerImg').src = imageSrc;
             document.getElementById('downloadImageBtn').href = imageSrc;
+            document.getElementById('imageViewerImg').classList.add('mb-4');
+
 
             const imageModal = new bootstrap.Modal(document.getElementById('imageViewerModal'));
             imageModal.show();
