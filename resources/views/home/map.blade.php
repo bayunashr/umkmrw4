@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Peta Digital UMKM - Banjarsugihan</title>
 
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" />
+
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
@@ -1572,7 +1574,7 @@
                         })
                     }).addTo(map);
 
-                    userMarker.bindPopup('📍 Lokasi Anda').openPopup();
+                    userMarker.bindPopup('<div class="m-2 text-center">📍 Lokasi Anda</div>').openPopup();
 
                     // Remove marker after 10 seconds
                     setTimeout(() => {
