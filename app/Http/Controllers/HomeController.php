@@ -178,4 +178,9 @@ class HomeController extends Controller
             abort(500, 'Terjadi kesalahan dalam memuat profil.');
         }
     }
+
+    public function showForgotPasswordForm()
+    {
+        return view('password.forgot');
+    }
 }

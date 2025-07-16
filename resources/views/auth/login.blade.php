@@ -101,11 +101,7 @@
                             </div>
                         </div>
                         <div class="mb-5 d-flex justify-content-between mt-5">
-                            <div class="form-check mt-2">
-                                <input name="remember" class="form-check-input" type="checkbox" id="remember-me" checked />
-                                <label class="form-check-label" for="remember-me"> Ingat Saya! </label>
-                            </div>
-                            <a href="auth-forgot-password-basic.html" class="float-end mb-1 mt-2">
+                            <a href="{{ route('password.forgot') }}" class="float-end mb-1 mt-2">
                                 <span>Lupa Password?</span>
                             </a>
                         </div>
@@ -118,6 +114,12 @@
                         <span>UMKM belum terdaftar?</span>
                         <a href="{{ route('register') }}">
                             <span>Daftarkan UMKM!</span>
+                        </a>
+                    </p>
+                    <hr>
+                    <p class="text-center">
+                        <a href="{{ route('home.index') }}">
+                            <span>Kembali Ke Halaman Awal!</span>
                         </a>
                     </p>
                 </div>

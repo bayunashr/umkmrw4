@@ -151,7 +151,7 @@
                     <div class="text-center mt-4 pt-3 border-top">
                         <small class="text-muted">
                             Lupa password?
-                            <a href="{{ route('umkm.password.forgot') }}" class="text-primary">
+                            <a href="{{ route('password.forgot') }}" class="text-primary">
                                 <i class="ri-question-line me-1"></i>
                                 Klik disini
                             </a>

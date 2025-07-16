@@ -3,21 +3,6 @@
 @section('title', 'Tambah Foto Galeri - Banjarsugihan UMKM Digital Map')
 
 @section('content')
-    <!-- Breadcrumb -->
-    <div class="mb-4">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a href="{{ route('umkm.dashboard') }}">Dashboard</a>
-                </li>
-                <li class="breadcrumb-item">
-                    <a href="{{ route('umkm.gallery') }}">Galeri</a>
-                </li>
-                <li class="breadcrumb-item active">Tambah Foto</li>
-            </ol>
-        </nav>
-    </div>
-
     <div class="card mb-6">
         <div class="card-header d-flex flex-wrap align-items-center justify-content-between mb-lg-4">
             <div class="flex-grow-0 me-md-3">

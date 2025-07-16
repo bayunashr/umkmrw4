@@ -336,13 +336,6 @@
                                     <i class="ri-lock-password-line me-2"></i>
                                     Ganti Password
                                 </a>
-
-                                <!-- Forgot Password Button -->
-                                <a href="{{ route('umkm.password.forgot') }}"
-                                   class="btn btn-outline-secondary d-flex align-items-center justify-content-center">
-                                    <i class="ri-question-line me-2"></i>
-                                    Lupa Password?
-                                </a>
                             </div>
                         </div>
                     </div>

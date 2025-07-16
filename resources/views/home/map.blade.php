@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peta Digital UMKM - Surabaya</title>
+    <title>Peta Digital UMKM - Banjarsugihan</title>
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -917,10 +917,9 @@
 <!-- Header -->
 <div class="header">
     <div class="logo">
-        <i class="fas fa-map-marked-alt"></i>
-        UMKM Surabaya
+        <img style="width: 35px;" src="{{ asset('assets/img/icons/pdlogo.png') }}" alt="Logo Peta Digital">
+        UMKM Banjarsugihan
     </div>
-
     <!-- Search -->
     <div class="header-search">
         <div class="search-container">
@@ -1021,6 +1020,9 @@
     </button>
     <button class="fab" onclick="toggleHeatmap()" title="Heatmap">
         <i class="fas fa-fire"></i>
+    </button>
+    <button class="fab" onclick="gotoLogin()" title="Masuk Panel">
+        <i class="fas fa-sign-in"></i>
     </button>
 </div>
 
@@ -1601,6 +1603,10 @@
             map.addLayer(heatmapLayer);
             isHeatmapVisible = true;
         }
+    }
+
+    function gotoLogin() {
+        window.location.href = "{{ route('login') }}";
     }
 
     // Remove test function since we're fixing the real issue

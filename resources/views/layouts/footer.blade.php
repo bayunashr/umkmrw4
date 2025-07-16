@@ -9,7 +9,13 @@
                     document.write(new Date().getFullYear());
                 </script>
                 , made with <span class="text-danger"><i class="tf-icons ri-heart-fill"></i></span> by
-                <a href="https://pixinvent.com" target="_blank" class="footer-link">Sugantara 107</a>
+                <a href="https://www.instagram.com/kknsdgs107upnvjt_banjarsugihan"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="footer-link">
+                    Sugantara 107
+                </a>
+
             </div>
         </div>
     </div>

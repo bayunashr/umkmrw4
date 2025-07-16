@@ -108,7 +108,7 @@
                                         id="phone-number-mask"
                                         name="phone"
                                         class="form-control phone-number-mask"
-                                        placeholder="821 5107 0990" />
+                                        placeholder="82151070990" />
                                     <label for="phone-number-mask">Nomor Telepon</label>
                                 </div>
                             </div>
@@ -241,6 +241,104 @@
             map.invalidateSize();
         }
     });
+
+    const formAuthentication = document.querySelector('#formAuthentication');
+
+    document.addEventListener('DOMContentLoaded', function (e) {
+        (function () {
+            // Form validation for Add new record
+            if (formAuthentication) {
+                const fv = FormValidation.formValidation(formAuthentication, {
+                    fields: {
+                        username: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Masukkan username'
+                                },
+                                stringLength: {
+                                    min: 4,
+                                    message: 'Minimal 4 karakter'
+                                }
+                            }
+                        },
+                        name: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Masukkan nama UMKM'
+                                },
+                            }
+                        },
+                        owner: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Masukkan nama pemilik'
+                                },
+                            }
+                        },
+                        password: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Masukkan password'
+                                },
+                                stringLength: {
+                                    min: 6,
+                                    message: 'Minimal 6 karakter'
+                                }
+                            }
+                        },
+                        'confirm-password': {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Masukkan ulang password'
+                                },
+                                identical: {
+                                    compare: function () {
+                                        return formAuthentication.querySelector('[name="password"]').value;
+                                    },
+                                    message: 'Password tidak sama'
+                                },
+                                stringLength: {
+                                    min: 6,
+                                    message: 'Minimal 6 karakter'
+                                }
+                            }
+                        },
+                    },
+                    plugins: {
+                        trigger: new FormValidation.plugins.Trigger(),
+                        bootstrap5: new FormValidation.plugins.Bootstrap5({
+                            eleValidClass: '',
+                            rowSelector: '.mb-5'
+                        }),
+                        submitButton: new FormValidation.plugins.SubmitButton(),
+
+                        defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+                        autoFocus: new FormValidation.plugins.AutoFocus()
+                    },
+                    init: instance => {
+                        instance.on('plugins.message.placed', function (e) {
+                            if (e.element.parentElement.classList.contains('input-group')) {
+                                e.element.parentElement.insertAdjacentElement('afterend', e.messageElement);
+                            }
+                        });
+                    }
+                });
+            }
+
+            //  Two Steps Verification
+            const numeralMask = document.querySelectorAll('.numeral-mask');
+
+            // Verification masking
+            if (numeralMask.length) {
+                numeralMask.forEach(e => {
+                    new Cleave(e, {
+                        numeral: true
+                    });
+                });
+            }
+        })();
+    });
+
 </script>
 
 <!-- Core JS -->
@@ -269,7 +367,6 @@
 <script src="{{ asset('') }}assets/js/main.js"></script>
 
 <!-- Page JS -->
-<script src="{{ asset('') }}assets/js/pages-auth.js"></script>
 <script src="{{ asset('') }}assets/js/forms-extras.js"></script>
 </body>
 </html>

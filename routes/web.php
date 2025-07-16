@@ -22,6 +22,7 @@ use App\Http\Middleware\IsUmkm;
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/password-forgot', [HomeController::class, 'showForgotPasswordForm'])->name('password.forgot');
 
 /*
 |--------------------------------------------------------------------------
@@ -119,7 +120,6 @@ Route::middleware(['auth', IsUmkm::class])
 
         Route::get('/profile/password/change', [ProfileController::class, 'showChangePasswordForm'])->name('password.change');
         Route::put('/profile/password/update', [ProfileController::class, 'updatePassword'])->name('password.update');
-        Route::get('/profile/password/forgot', [ProfileController::class, 'showForgotPasswordForm'])->name('password.forgot');
 
         Route::get('/product', [ProductController::class, 'index'])->name('product');
         Route::get('/product/create', [ProductController::class, 'create'])->name('product.create');
