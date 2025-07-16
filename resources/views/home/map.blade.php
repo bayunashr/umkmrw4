@@ -1231,11 +1231,7 @@
                         <div class="popup-info">
                             <div class="popup-info-item">
                                 <i class="fas fa-phone"></i>
-                                ${umkm.phone || 'No. telp tidak tersedia'}
-                            </div>
-                            <div class="popup-info-item">
-                                <i class="fas fa-calendar"></i>
-                                ${new Date(umkm.created_at).toLocaleDateString('id-ID')}
+                                0${umkm.phone || 'No. telp tidak tersedia'}
                             </div>
                         </div>
                         ${productsHtml}
@@ -1244,7 +1240,7 @@
                                 <i class="fas fa-eye"></i>
                                 Lihat Profil
                             </a>
-                            <a href="tel:${umkm.phone}" class="popup-button secondary">
+                            <a target="_blank" href="https://wa.me/62${umkm.phone}" class="popup-button secondary">
                                 <i class="fas fa-phone"></i>
                                 Hubungi
                             </a>
