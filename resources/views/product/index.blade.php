@@ -98,19 +98,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr>
-                        <td colspan="5" class="text-center py-5">
-                            <div class="empty-state">
-                                <i class="ri-shopping-bag-line text-muted" style="font-size: 48px;"></i>
-                                <h6 class="mt-3 mb-1">Belum Ada Produk</h6>
-                                <p class="text-muted mb-3">Tambahkan produk pertama Anda untuk mulai berjualan</p>
-                                <a href="{{ route('umkm.product.create') }}" class="btn btn-primary">
-                                    <i class="ri-add-line me-1"></i>
-                                    Tambah Produk
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
+                    {{-- Empty state akan ditangani oleh DataTables emptyTable --}}
                 @endforelse
                 </tbody>
             </table>
@@ -171,6 +159,8 @@
     <style>
         .empty-state {
             padding: 2rem 1rem;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
         .avatar-initial {
@@ -202,12 +192,49 @@
             .datatables-data-umkm td:nth-child(3) {
                 display: none;
             }
+
+            .empty-state {
+                padding: 1.5rem 1rem;
+            }
+
+            .empty-state i {
+                font-size: 48px !important;
+            }
         }
 
         @media (max-width: 576px) {
             .datatables-data-umkm th:nth-child(4),
             .datatables-data-umkm td:nth-child(4) {
                 display: none;
+            }
+
+            .empty-state {
+                padding: 1rem 0.5rem;
+            }
+
+            .empty-state h5 {
+                font-size: 1.1rem;
+            }
+
+            .empty-state p {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Header styling when no datatable */
+        .no-datatable-header {
+            padding: 1.5rem 1.5rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .no-datatable-header .btn {
+            margin-bottom: 1rem;
+        }
+
+        /* Improve modal responsiveness */
+        @media (max-width: 576px) {
+            .modal-dialog {
+                margin: 0.5rem;
             }
         }
     </style>
@@ -274,14 +301,14 @@
                     order: [[1, 'asc']], // Sort by product name by default
                     buttons: [
                         {
-                            text: '<i class="ri-add-line ri-16px me-sm-2"></i> <span class="d-none d-sm-inline-block">Tambah Produk / Layanan</span>',
+                            text: '<i class="ri-add-line ri-16px me-sm-2"></i> <span class="d-none d-sm-inline-block">Tambah Produk</span>',
                             className: 'create-new btn btn-primary waves-effect waves-light',
                             action: function () {
                                 window.location.href = '{{ route('umkm.product.create') }}';
                             }
                         }
                     ],
-                    dom: '<"card-header flex-column flex-md-row border-bottom"<"head-label text-center"><"dt-action-buttons text-end pt-3 pt-md-0"B>><"row"<"col-sm-12 col-md-6 mt-5 mt-md-0"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+                    dom: '<"card-header flex-column flex-md-row border-bottom"<"head-label text-center"><"dt-action-buttons text-end pt-3 pt-md-0"B>><"row"<"col-sm-12 col-md-6 mt-3 mt-md-0"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end mt-3 mt-md-0"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
                     language: {
                         paginate: {
                             next: '<i class="ri-arrow-right-s-line"></i>',
@@ -293,7 +320,23 @@
                         infoEmpty: "Menampilkan 0 produk",
                         infoFiltered: "(disaring dari total _MAX_ produk)",
                         search: "Cari:",
-                        emptyTable: "Belum ada produk ditambahkan"
+                        emptyTable: `
+                            <div class="text-center py-5">
+                                <i class="ri-shopping-bag-line text-muted" style="font-size: 64px;"></i>
+                                <h5 class="mt-3 mb-2">Belum Ada Produk</h5>
+                                <p class="text-muted mb-4">Tambahkan produk pertama Anda untuk mulai berjualan dan menarik lebih banyak pelanggan</p>
+                                <a href="{{ route('umkm.product.create') }}" class="btn btn-primary">
+                                    <i class="ri-add-line me-1"></i>
+                                    Tambah Produk Pertama
+                                </a>
+                            </div>
+                        `
+                    },
+                    pageLength: 10,
+                    lengthMenu: [5, 10, 25, 50, 100],
+                    drawCallback: function(settings) {
+                        // Re-initialize tooltips after table redraw
+                        $('[data-bs-toggle="tooltip"]').tooltip();
                     }
                 });
 
@@ -325,6 +368,7 @@
                 if (alert.classList.contains('alert-success') || alert.classList.contains('alert-danger')) {
                     setTimeout(() => {
                         alert.style.opacity = '0';
+                        alert.style.transition = 'opacity 0.3s ease';
                         setTimeout(() => {
                             if (alert.parentNode) {
                                 alert.remove();
@@ -333,6 +377,9 @@
                     }, 5000);
                 }
             });
+
+            // Initialize tooltips
+            $('[data-bs-toggle="tooltip"]').tooltip();
         });
     </script>
 @endpush

@@ -12,6 +12,9 @@ class UMKMApprovalController extends Controller
     {
         $pendingUmkm = Profile::with('user')
             ->where('profiles.is_approved', 0)
+            ->whereHas('user', function ($query) {
+                $query->where('role', 1);
+            })
             ->get();
 
         return view('admin.approval.index', compact('pendingUmkm'));
