@@ -16,6 +16,9 @@ class HomeController extends Controller
             ->whereNotNull('longitude')
             ->where('latitude', '!=', 0)
             ->where('longitude', '!=', 0)
+            ->whereHas('user', function ($query) {
+                $query->where('role', 1);
+            })
             ->with(['user', 'products' => function($query) {
                 $query->take(3); // Ambil 3 produk terbaru
             }])
