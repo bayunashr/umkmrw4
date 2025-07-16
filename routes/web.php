@@ -40,7 +40,7 @@ Route::post('/register', [RegisterController::class, 'register'])->name('registe
 Route::get('/waiting-approval', function () {
     $user = auth()->user();
 
-    if ($user->role === 0) {
+    if ($user->role == 0) {
         return redirect()->route('admin.dashboard');
     }
 
@@ -59,9 +59,9 @@ Route::get('/waiting-approval', function () {
 Route::middleware('auth')->get('/dashboard', function () {
     $user = auth()->user();
 
-    if ($user->role === 0) {
+    if ($user->role == 0) {
         return redirect()->route('admin.dashboard');
-    } elseif ($user->role === 1) {
+    } elseif ($user->role == 1) {
         if (!$user->profile || !$user->profile->is_approved) {
             return redirect()->route('approval.waiting');
         }
