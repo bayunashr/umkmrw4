@@ -30,7 +30,7 @@ class AuthController extends Controller
 
             $user = auth()->user();
 
-            if ($user->role === 1) {
+            if ($user->role == 1) {
                 if (!$user->profile || !$user->profile->is_approved) {
                     return redirect()->route('approval.waiting');
                 }
