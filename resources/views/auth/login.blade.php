@@ -249,6 +249,12 @@
                             Daftarkan UMKM Anda Sekarang!
                         </a>
                     </p>
+                    <hr>
+                    <p class="text-center mt-4 mb-0">
+                        <a href="{{ route('home.index') }}">
+                            Kembali ke halaman utama
+                        </a>
+                    </p>
                 </div>
             </div>
             <!-- /Login -->
